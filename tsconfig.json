@@ -1,0 +1,19 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "jsx": "react-jsx", // Enables the new JSX transform
+    "jsxImportSource": "react", // Ensures React is the JSX runtime
+    "noUnusedLocals": false, // Ignore unused variables
+    "noUnusedParameters": false, // Ignore unused parameters
+    "skipLibCheck": true, // Skip type checking of all declaration files (.d.ts)
+    "noImplicitAny": false, // Allow variables with implicit 'any' type
+    "strict": false, // Disable all strict type-checking options
+    "forceConsistentCasingInFileNames": false,
+    "allowUnreachableCode": true, // Allow unreachable code
+    "allowUnusedLabels": true // Allow unused labels
+  }
+}

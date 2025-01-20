@@ -1,0 +1,319 @@
+import React, { useState } from "react";
+
+import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
+import {
+  mplCore,
+  createCollection,
+  fetchCollectionV1,
+  fetchCollection,
+  ruleSet,
+  create,
+  transfer,
+  transferV1,
+  fetchAssetsByOwner,
+} from "@metaplex-foundation/mpl-core";
+import { transferTokens } from "@metaplex-foundation/mpl-toolbox";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
+import { generateSigner, transactionBuilder } from "@metaplex-foundation/umi";
+import toast from "react-hot-toast";
+
+function Dummy(props) {
+  const [collectionName, setCollectionName] = useState("");
+  const [collectionUri, setCollectionUri] = useState("");
+  const [collectionAddress, setCollectionAddress] = useState("");
+  const [assetName, setAssetName] = useState("");
+  const [assetUri, setAssetUri] = useState("");
+  const [assetCollectionAddress, setAssetCollectionAddress] = useState("");
+  const [assetAuthorityPublicKey, setAssetAuthorityPublicKey] = useState("");
+  const [assetAuthoritySecret, setAssetAuthoritySecret] = useState("");
+  const [toSendAssetAddress, setToSendAssetAddress] = useState("");
+  const [receiverAddress, setReceiverAddress] = useState("");
+  const [toSendCollectionAddress, setToSendCollectionAddress] = useState("");
+  const [toSendMultipleAssets, setToSendMultipleAssets] = useState([]);
+  const [fetchAssetsByOwnerAddr, setFetchAssetsByOwnerAddr] = useState("");
+
+  const wallet = useWallet();
+  const { connection } = useConnection();
+  const umi = createUmi(connection)
+    .use(walletAdapterIdentity(wallet))
+    .use(mplCore());
+
+  const createTestCollection = async () => {
+    console.log("Creating test collection...");
+    const collectionUpdateAuthority = generateSigner(umi);
+    console.log("Collection Update Authority: ", collectionUpdateAuthority);
+    const collectionAddress = generateSigner(umi);
+    console.log("Collection Address: ", collectionAddress);
+    const response = await createCollection(umi, {
+      name: collectionName,
+      uri: collectionUri,
+      collection: collectionAddress,
+      //   updateAuthority: collectionUpdateAuthority.publicKey, // optional, defaults to payer
+      plugins: [
+        {
+          type: "MasterEdition",
+          maxSupply: 100,
+          name: collectionName,
+          uri: collectionUri,
+        },
+        {
+          type: "Royalties",
+          basisPoints: 500,
+          creators: [{ address: umi.identity.publicKey, percentage: 100 }],
+          ruleSet: ruleSet("None"),
+        },
+      ],
+    }).sendAndConfirm(umi);
+    console.log("Create Collection Response: ", response);
+  };
+
+  const getCollection = async () => {
+    console.log("Getting collection...");
+    const collection = await fetchCollectionV1(umi, collectionAddress);
+    console.log("Collection: ", collection);
+  };
+
+  const createAsset = async () => {
+    console.log("Creating asset...");
+    const assetAddress = generateSigner(umi);
+    console.log("Asset Address: ", assetAddress);
+    console.log("Asset Collection Address: ", assetCollectionAddress);
+    console.log("Asset Authority Public Key: ", assetAuthorityPublicKey);
+    // console.log(
+    //   "Asset Authority Secret: ",
+    //   assetAuthoritySecret,
+    //   JSON.parse(assetAuthoritySecret)
+    // );
+    const collFetch = await fetchCollection(umi, assetCollectionAddress);
+    console.log("Collection Fetch: ", collFetch);
+
+    // convert assetAuthoritySecret to Uint8Array(64)
+    // const secret = new Uint8Array(
+    //   Object.values(JSON.parse(assetAuthoritySecret))
+    // );
+    // console.log("Secret: ", secret);
+
+    const response = await create(umi, {
+      name: assetName,
+      uri: assetUri,
+      asset: assetAddress,
+      collection: collFetch,
+      //   authority: assetAuthorityPublicKey,
+      //   authority: {
+      //     publicKey: assetAuthorityPublicKey,
+      //     secret: secret,
+      //   },
+    }).sendAndConfirm(umi);
+    console.log("Create Asset Response: ", response);
+  };
+
+  const sendMultipleAssets = async () => {
+    console.log("Sending asset...");
+    console.log("Asset Address: ", toSendMultipleAssets);
+    console.log("Recipient Address: ", receiverAddress);
+    const collection = await fetchCollectionV1(umi, toSendCollectionAddress);
+    console.log("Collection: ", collection);
+
+    let builder = transactionBuilder();
+
+    console.log("Builder Setup: ", builder);
+
+    // for (const address in toSendMultipleAssets) {
+    //   const transferBuilder = transfer(umi, {
+    //     asset: address,
+    //     newOwner: receiverAddress,
+    //     collection: collection,
+    //   });
+    //   builder = builder.add(transferBuilder);
+    // }
+
+    for (const address of toSendMultipleAssets) {
+      const transferBuilder = transferV1(umi, {
+        asset: address,
+        newOwner: receiverAddress,
+        collection: collection,
+      });
+      builder = builder.add(transferBuilder);
+    }
+
+    console.log("Builder with multiple assets: ", builder);
+
+    // Optionally check transaction size
+    // const isSmallEnough = builder.fitsInOneTransaction(umi);
+    // if (!isSmallEnough) {
+    //   console.error("Transaction too large.");
+    //   toast.error("Transaction too large.");
+    //   return;
+    // }
+
+    // console.log("Builder Ready: ", builder, isSmallEnough);
+
+    const response = await builder.sendAndConfirm(umi);
+
+    // const response = await transfer(umi, {
+    //   asset: toSendAssetAddress,
+    //   newOwner: receiverAddress,
+    //   collection: collection,
+    // }).sendAndConfirm(umi);
+    console.log("Send Asset Response: ", response);
+  };
+
+  const fetchAssets = async () => {
+    console.log("Fetching assets...");
+    console.log("Owner Address: ", fetchAssetsByOwnerAddr);
+    const assetsByOwner = await fetchAssetsByOwner(
+      umi,
+      fetchAssetsByOwnerAddr,
+      {
+        skipDerivePlugins: false,
+      }
+    );
+    console.log("Assets by Owner: ", assetsByOwner);
+  };
+
+  const showWalletObject = () => {
+    console.log("Wallet Object: ", wallet);
+    console.log("Public Key: ", wallet.publicKey?.toString());
+    console.log("UMI Public Key: ", umi.identity.publicKey.toString());
+  };
+
+  return (
+    <div className="flex flex-col items-start justify-start my-20 text-lg px-28 gap-y-4">
+      This is dummy page
+      <button className="btn" onClick={showWalletObject}>
+        Show Wallet Object
+      </button>
+      {/* create collection */}
+      <div className="flex flex-row items-center gap-x-4">
+        <button className="btn btn-primary" onClick={createTestCollection}>
+          Create Master Collection NFT
+        </button>
+        <input
+          type="text"
+          placeholder="Master Collection Name"
+          className="input input-bordered"
+          value={collectionName}
+          onChange={(e) => setCollectionName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Master Collection URI"
+          className="input input-bordered"
+          value={collectionUri}
+          onChange={(e) => setCollectionUri(e.target.value)}
+        />
+      </div>
+      {/* get collection */}
+      <div className="flex flex-row items-center gap-x-4">
+        <button className="btn btn-primary" onClick={getCollection}>
+          Get ME Coll. Details
+        </button>
+        <input
+          type="text"
+          placeholder="collectionAddress.publicKey"
+          className="input input-bordered"
+          value={collectionAddress}
+          onChange={(e) => setCollectionAddress(e.target.value)}
+        />
+      </div>
+      {/* create asset in a collection */}
+      <div className="flex flex-row items-center gap-x-4">
+        <button className="btn btn-primary" onClick={createAsset}>
+          Create One Edition NFT under ME Coll.
+        </button>
+        <div className="grid grid-cols-3 gap-x-3 gap-y-3">
+          <input
+            type="text"
+            placeholder="M.Coll Address"
+            className="input input-bordered"
+            value={assetCollectionAddress}
+            onChange={(e) => setAssetCollectionAddress(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Asset Name"
+            className="input input-bordered"
+            value={assetName}
+            onChange={(e) => setAssetName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Asset URI"
+            className="input input-bordered"
+            value={assetUri}
+            onChange={(e) => setAssetUri(e.target.value)}
+          />
+          {/* get authority public key and secret */}
+          {/* <input
+            type="text"
+            placeholder="authority.publicKey"
+            className="input input-bordered"
+            value={assetAuthorityPublicKey}
+            onChange={(e) => setAssetAuthorityPublicKey(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="authority.secret"
+            className="input input-bordered"
+            value={assetAuthoritySecret}
+            onChange={(e) => setAssetAuthoritySecret(e.target.value)}
+          /> */}
+        </div>
+      </div>
+      {/* send asset to someone */}
+      <div className="flex flex-row items-center gap-x-4">
+        <button className="btn btn-primary" onClick={sendMultipleAssets}>
+          Send Asset(NFT)
+        </button>
+        {/* <input
+          type="text"
+          placeholder="Asset Address"
+          className="input input-bordered"
+          value={toSendAssetAddress}
+          onChange={(e) => setToSendAssetAddress(e.target.value)}
+        /> */}
+        <input
+          type="text"
+          placeholder="M.Coll Address"
+          className="input input-bordered"
+          value={toSendCollectionAddress}
+          onChange={(e) => setToSendCollectionAddress(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Receiver Address"
+          className="input input-bordered"
+          value={receiverAddress}
+          onChange={(e) => setReceiverAddress(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Multiple Assets"
+          className="input input-bordered"
+          value={toSendMultipleAssets}
+          onChange={(e) => {
+            // delimit the input by comma, remove white spaces and convert to array
+            const assets = e.target.value.split(",");
+            setToSendMultipleAssets(assets);
+          }}
+        />
+      </div>
+      {/* fetch assets by owner */}
+      <div className="flex flex-row items-center gap-x-4">
+        <button className="btn btn-primary" onClick={fetchAssets}>
+          Fetch Assets(Balance)
+        </button>
+        <input
+          type="text"
+          placeholder="Owner Address"
+          className="input input-bordered"
+          value={fetchAssetsByOwnerAddr}
+          onChange={(e) => setFetchAssetsByOwnerAddr(e.target.value)}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default Dummy;

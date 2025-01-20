@@ -1,0 +1,319 @@
+import React, { useState } from "react";
+import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
+import {
+  mplCore,
+  createCollection,
+  fetchCollectionV1,
+  fetchCollection,
+  create,
+  transferV1,
+  fetchAssetsByOwner,
+} from "@metaplex-foundation/mpl-core";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
+import { generateSigner, transactionBuilder } from "@metaplex-foundation/umi";
+
+function Dummy() {
+  const [collectionName, setCollectionName] = useState("");
+  const [collectionUri, setCollectionUri] = useState("");
+  const [collectionAddress, setCollectionAddress] = useState("");
+  const [assetName, setAssetName] = useState("");
+  const [assetUri, setAssetUri] = useState("");
+  const [assetCollectionAddress, setAssetCollectionAddress] = useState("");
+  const [toSendCollectionAddress, setToSendCollectionAddress] = useState("");
+  const [receiverAddress, setReceiverAddress] = useState("");
+  const [toSendMultipleAssets, setToSendMultipleAssets] = useState("");
+  const [fetchAssetsByOwnerAddr, setFetchAssetsByOwnerAddr] = useState("");
+  const [result, setResult] = useState(null);
+
+  const wallet = useWallet();
+  const { connection } = useConnection();
+  const umi = createUmi(connection)
+    .use(walletAdapterIdentity(wallet))
+    .use(mplCore());
+
+  const createTestCollection = async () => {
+    try {
+      const collectionUpdateAuthority = generateSigner(umi);
+      const collectionAddress = generateSigner(umi);
+      const response = await createCollection(umi, {
+        name: collectionName,
+        uri: collectionUri,
+        collection: collectionAddress,
+        plugins: [
+          {
+            type: "MasterEdition",
+            maxSupply: 100,
+            name: collectionName,
+            uri: collectionUri,
+          },
+          {
+            type: "Royalties",
+            basisPoints: 500,
+            creators: [{ address: umi.identity.publicKey, percentage: 100 }],
+            ruleSet: "None",
+          },
+        ],
+      }).sendAndConfirm(umi);
+      setResult({ type: "Collection Created", data: response });
+    } catch (error) {
+      setResult({ type: "Error", data: error.message });
+    }
+  };
+
+  const getCollection = async () => {
+    try {
+      const collection = await fetchCollectionV1(umi, collectionAddress);
+      setResult({ type: "Collection Details", data: collection });
+    } catch (error) {
+      setResult({ type: "Error", data: error.message });
+    }
+  };
+
+  const createAsset = async () => {
+    try {
+      const assetAddress = generateSigner(umi);
+      const collFetch = await fetchCollection(umi, assetCollectionAddress);
+      const response = await create(umi, {
+        name: assetName,
+        uri: assetUri,
+        asset: assetAddress,
+        collection: collFetch,
+      }).sendAndConfirm(umi);
+      setResult({ type: "Asset Created", data: response });
+    } catch (error) {
+      setResult({ type: "Error", data: error.message });
+    }
+  };
+
+  const sendMultipleAssets = async () => {
+    try {
+      const collection = await fetchCollectionV1(umi, toSendCollectionAddress);
+      let builder = transactionBuilder();
+      const assets = toSendMultipleAssets
+        .split(",")
+        .map((asset) => asset.trim());
+
+      for (const address of assets) {
+        const transferBuilder = transferV1(umi, {
+          asset: address,
+          newOwner: receiverAddress,
+          collection: collection,
+        });
+        builder = builder.add(transferBuilder);
+      }
+
+      const response = await builder.sendAndConfirm(umi);
+      setResult({ type: "Assets Sent", data: response });
+    } catch (error) {
+      setResult({ type: "Error", data: error.message });
+    }
+  };
+
+  const fetchAssets = async () => {
+    try {
+      const assetsByOwner = await fetchAssetsByOwner(
+        umi,
+        fetchAssetsByOwnerAddr,
+        {
+          skipDerivePlugins: false,
+        }
+      );
+      setResult({ type: "Assets Fetched", data: assetsByOwner });
+    } catch (error) {
+      setResult({ type: "Error", data: error.message });
+    }
+  };
+
+  const showWalletObject = () => {
+    setResult({
+      type: "Wallet Info",
+      data: {
+        publicKey: wallet.publicKey?.toString(),
+        umiPublicKey: umi.identity.publicKey.toString(),
+      },
+    });
+  };
+
+  const customSerializer = (key, value) => {
+    if (typeof value === "bigint") {
+      return value.toString();
+    }
+    return value;
+  };
+
+  const renderResult = () => {
+    if (!result) return null;
+
+    return (
+      <div className="p-4 mt-8 bg-gray-100 rounded-lg">
+        <h3 className="mb-2 text-xl font-semibold">{result.type}</h3>
+        <pre className="p-2 break-words whitespace-pre-wrap bg-white rounded">
+          {typeof result.data === "object"
+            ? JSON.stringify(result.data, customSerializer, 2)
+            : result.data}
+        </pre>
+      </div>
+    );
+  };
+
+  return (
+    <div className="container px-4 py-8 mx-auto">
+      <h1 className="mb-8 text-3xl font-bold">NFT Dashboard</h1>
+      <div className="flex flex-row items-start justify-center gap-x-16">
+        <div className="space-y-8">
+          <section>
+            <h2 className="mb-4 text-2xl font-semibold">Wallet Information</h2>
+            <button
+              className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+              onClick={showWalletObject}
+            >
+              Show Wallet Info
+            </button>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-semibold">
+              Create Master Collection NFT
+            </h2>
+            <div className="flex space-x-4">
+              <input
+                type="text"
+                placeholder="Collection Name"
+                className="flex-grow p-2 border rounded"
+                value={collectionName}
+                onChange={(e) => setCollectionName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Collection URI"
+                className="flex-grow p-2 border rounded"
+                value={collectionUri}
+                onChange={(e) => setCollectionUri(e.target.value)}
+              />
+              <button
+                className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+                onClick={createTestCollection}
+              >
+                Create
+              </button>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-semibold">
+              Get Collection Details
+            </h2>
+            <div className="flex space-x-4">
+              <input
+                type="text"
+                placeholder="Collection Address"
+                className="flex-grow p-2 border rounded"
+                value={collectionAddress}
+                onChange={(e) => setCollectionAddress(e.target.value)}
+              />
+              <button
+                className="px-4 py-2 text-white bg-yellow-500 rounded hover:bg-yellow-600"
+                onClick={getCollection}
+              >
+                Get Details
+              </button>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-semibold">
+              Create NFT in Collection
+            </h2>
+            <div className="grid grid-cols-3 gap-4">
+              <input
+                type="text"
+                placeholder="Collection Address"
+                className="p-2 border rounded"
+                value={assetCollectionAddress}
+                onChange={(e) => setAssetCollectionAddress(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Asset Name"
+                className="p-2 border rounded"
+                value={assetName}
+                onChange={(e) => setAssetName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Asset URI"
+                className="p-2 border rounded"
+                value={assetUri}
+                onChange={(e) => setAssetUri(e.target.value)}
+              />
+            </div>
+            <button
+              className="px-4 py-2 mt-4 text-white bg-purple-500 rounded hover:bg-purple-600"
+              onClick={createAsset}
+            >
+              Create NFT
+            </button>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-semibold">Send NFTs</h2>
+            <div className="grid grid-cols-3 gap-4">
+              <input
+                type="text"
+                placeholder="Collection Address"
+                className="p-2 border rounded"
+                value={toSendCollectionAddress}
+                onChange={(e) => setToSendCollectionAddress(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Receiver Address"
+                className="p-2 border rounded"
+                value={receiverAddress}
+                onChange={(e) => setReceiverAddress(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Asset Addresses (comma-separated)"
+                className="p-2 border rounded"
+                value={toSendMultipleAssets}
+                onChange={(e) => setToSendMultipleAssets(e.target.value)}
+              />
+            </div>
+            <button
+              className="px-4 py-2 mt-4 text-white bg-red-500 rounded hover:bg-red-600"
+              onClick={sendMultipleAssets}
+            >
+              Send NFTs
+            </button>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-semibold">
+              Fetch Assets by Owner
+            </h2>
+            <div className="flex space-x-4">
+              <input
+                type="text"
+                placeholder="Owner Address"
+                className="flex-grow p-2 border rounded"
+                value={fetchAssetsByOwnerAddr}
+                onChange={(e) => setFetchAssetsByOwnerAddr(e.target.value)}
+              />
+              <button
+                className="px-4 py-2 text-white bg-indigo-500 rounded hover:bg-indigo-600"
+                onClick={fetchAssets}
+              >
+                Fetch Assets
+              </button>
+            </div>
+          </section>
+        </div>
+        {renderResult()}
+      </div>
+    </div>
+  );
+}
+
+export default Dummy;

@@ -1,0 +1,474 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import solanaLogo from "../assets/img/solanaLogo.png";
+import heroImage from "../assets/img/hero.png";
+import HeroCards from "../components/custom/HeroCards";
+import {
+  faArrowUpRightDots,
+  faFolderOpen,
+  faHandHoldingDollar,
+  faShieldHalved,
+  faUserCheck,
+  faCircleCheck,
+} from "@fortawesome/free-solid-svg-icons";
+import PriceBar from "../components/animata/PriceBar";
+import Footer from "../components/custom/Footer";
+
+function Home() {
+  return (
+    <div className="flex flex-col">
+      {/* Top hero container */}
+      <div className="container flex flex-col items-center justify-between px-4 ml-auto space-y-8 md:flex-row md:space-x-4 md:space-y-0">
+        {/* Left container */}
+        <div className="flex flex-col items-start pl-4 text-left md:pl-8 gap-y-6">
+          {/* Text container */}
+          <div>
+            <div className="mb-3 text-3xl md:text-4xl">
+              The New Age of Investment
+            </div>
+            <div className="flex flex-col text-5xl gap-y-3 md:text-8xl">
+              <div className="font-bold">Own Real Estate Shares</div>
+              <div className="font-bold">Own the Future</div>
+            </div>
+          </div>
+
+          {/* Button container */}
+          <div className="flex flex-row my-3 gap-x-4 md:gap-x-8">
+            <button className="px-4 py-2 md:px-6 md:py-3 text-black bg-alpha border-[3px] w-40 md:w-48 border-gamma rounded-full hover:bg-gamma hover:text-white">
+              Get Started
+            </button>
+            <button className="px-4 py-2 md:px-6 md:py-3 text-white bg-gamma border-[3px] w-40 md:w-48 border-gamma rounded-full hover:bg-alpha hover:text-black">
+              Get Started
+            </button>
+          </div>
+        </div>
+
+        {/* Right container */}
+        <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">
+          <img
+            src={heroImage}
+            alt="placeholder"
+            className="object-cover w-full h-auto"
+          />
+        </div>
+      </div>
+
+      {/* Bottom container */}
+      <div className="flex flex-col items-center justify-center w-full px-4 mt-8 mb-40 md:px-8">
+        <HeroCards />
+      </div>
+
+      {/* secure choice container */}
+      <div className="flex flex-row items-center justify-center my-28 gap-x-20">
+        {/* left container */}
+        <div className="flex flex-col items-start">
+          <p className="text-4xl font-bold">Real Estate: The Secure Choice</p>
+          <p className="text-lg w-[40rem] text-left">
+            While stock markets fluctuate, real estate offers a reliable and
+            safer investment option.
+          </p>
+        </div>
+        {/* right container */}
+        <div className="flex flex-col items-center justify-center gap-y-3">
+          <div className="flex flex-row items-center justify-between p-3 px-8 py-4 gap-x-20 rounded-2xl bg-black/10 w-[40rem]">
+            <div className="flex flex-row items-center gap-x-4">
+              <FontAwesomeIcon icon={faUserCheck} size="xl" />
+              <p className="text-xl">Fractional Ownership, Full Potential</p>
+            </div>
+            <button className="p-2 px-6 py-3 font-bold text-white bg-black border-2 rounded-full hover:bg-white hover:border-black hover:text-black ">
+              View
+            </button>
+          </div>
+
+          <div className="flex flex-row items-center justify-between p-3 px-8 py-4 gap-x-20 rounded-2xl bg-black/10 w-[40rem]">
+            <div className="flex flex-row items-center gap-x-4">
+              <FontAwesomeIcon icon={faShieldHalved} size="xl" />
+              <p className="text-xl">Property-Backed Security</p>
+            </div>
+            <button className="p-2 px-6 py-3 font-bold text-white bg-black border-2 rounded-full hover:bg-white hover:border-black hover:text-black ">
+              View
+            </button>
+          </div>
+
+          <div className="flex w-[40rem] flex-row items-center justify-between p-3 px-8 py-4 gap-x-20 rounded-2xl bg-black/10">
+            <div className="flex flex-row items-center gap-x-4">
+              <FontAwesomeIcon icon={faFolderOpen} size="xl" />
+              <p className="text-xl">Diversify with Ease</p>
+            </div>
+            <button className="p-2 px-6 py-3 font-bold text-white bg-black border-2 rounded-full hover:bg-white hover:border-black hover:text-black ">
+              View
+            </button>
+          </div>
+
+          <div className="flex flex-row w-[40rem] items-center justify-between p-3 px-8 py-4 gap-x-20 rounded-2xl bg-black/10">
+            <div className="flex flex-row items-center gap-x-4">
+              <FontAwesomeIcon icon={faHandHoldingDollar} size="xl" />
+              <p className="text-xl">Flexible for Every Investor</p>
+            </div>
+            <button className="p-2 px-6 py-3 font-bold text-white bg-black border-2 rounded-full hover:bg-white hover:border-black hover:text-black ">
+              View
+            </button>
+          </div>
+
+          <div className="flex flex-row items-center w-[40rem] justify-between p-3 px-8 py-4 gap-x-20 rounded-2xl bg-black/10">
+            <div className="flex flex-row items-center gap-x-4">
+              <FontAwesomeIcon icon={faArrowUpRightDots} size="xl" />
+              <p className="text-xl">Stable Growth, Less Risk</p>
+            </div>
+            <button className="p-2 px-6 py-3 font-bold text-white bg-black border-2 rounded-full hover:bg-white hover:border-black hover:text-black ">
+              View
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* blockchain container */}
+      <div className="flex flex-col items-center justify-center my-28">
+        <div className="flex flex-col gap-y-2">
+          <p className="text-4xl font-bold">Powered by Solana</p>
+          <p className="text-lg w-[70rem] leading-tight">
+            Our platform is currently being developed on Solana as part of the
+            ongoing hackathon. Solana's high speed and low fees make it the
+            perfect foundation for our vision. Stay tuned as we leverage the
+            power of Solana to deliver a seamless experience.
+          </p>
+        </div>
+
+        {/* logo container */}
+        <div className="px-10 py-4 my-8 bg-black rounded-2xl">
+          <img
+            src={solanaLogo}
+            alt="placeholder"
+            className="w-40 h-auto cover"
+          />
+        </div>
+      </div>
+
+      {/* crypto for everyone container */}
+      <div className="flex flex-row justify-center gap-x-10 my-28">
+        {/* left container */}
+        <div className="flex flex-col gap-y-3">
+          <div className="flex flex-col gap-y-2">
+            <p className="text-4xl font-bold text-left">
+              Seamless Crypto for Everyone
+            </p>
+            <p className="text-lg text-left w-[40rem] leading-tight">
+              No more worries about wallet, lost private key, gas and so on.
+              Provest fully abstracts the complexity and give you a seamless
+              crypto experience in a secure way. It’s your wallet, your crypto,
+              your shares.
+            </p>
+          </div>
+          <div className="flex flex-col mt-3 gap-y-3">
+            <div className="flex flex-row items-center gap-x-3">
+              <div className="flex flex-col items-center justify-center w-10 h-10 bg-black rounded-full ">
+                <p className="text-sm font-bold text-white">1</p>
+              </div>
+              <p className="">Fully Self-Custodial</p>
+            </div>
+            <div className="flex flex-row items-center gap-x-3">
+              <div className="flex flex-col items-center justify-center w-10 h-10 bg-black rounded-full ">
+                <p className="text-sm font-bold text-white">2</p>
+              </div>
+              <p className="">Recoverable Wallets</p>
+            </div>
+            <div className="flex flex-row items-center gap-x-3">
+              <div className="flex flex-col items-center justify-center w-10 h-10 bg-black rounded-full ">
+                <p className="text-sm font-bold text-white">3</p>
+              </div>
+              <p className="">Exportable Private Key</p>
+            </div>
+          </div>
+
+          <div className="mt-8 w-[30rem] text-left">
+            <div className="py-0 my-0 divider"></div>
+            <div>
+              <p className="text-sm italic">
+                NOTE: Advanced crypto users who already own a external wallet
+                can login with their wallet and invest using the crypto funds
+                they own.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* right container */}
+        <div className="flex flex-row items-center justify-center">
+          <ul className="items-start timeline timeline-vertical">
+            {/* first item */}
+            <li className="grid grid-cols-1">
+              <div className="timeline-middle">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="my-3 border-none crypto-shadow timeline-end timeline-box">
+                <div className="px-4 py-3 w-[25rem]">
+                  <p className="text-xl">Login with your email</p>
+                </div>
+              </div>
+              <hr />
+            </li>
+
+            {/* second item */}
+            <li className="grid grid-cols-1">
+              <hr />
+              <div className="timeline-middle">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="my-3 border-none crypto-shadow timeline-end timeline-box">
+                <div className="px-4 py-3 w-[25rem]">
+                  <p className="text-xl">Select Property to Invest</p>
+                </div>
+              </div>
+              <hr />
+            </li>
+
+            {/* third item */}
+            <li className="grid grid-cols-1">
+              <hr />
+              <div className="timeline-middle">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="my-3 border-none crypto-shadow timeline-end timeline-box">
+                <div className="px-4 py-3 w-[25rem]">
+                  <p className="text-xl">Pay with currency of your choice</p>
+                  <p className="text-xs">
+                    BTC / ETH / POL{" "}
+                    <span className="font-bold">&nbsp;(or)&nbsp;</span> USD /
+                    EUR / INR
+                  </p>
+                </div>
+              </div>
+              <hr />
+            </li>
+
+            {/* fourth item */}
+            <li className="grid grid-cols-1">
+              <hr />
+              <div className="timeline-middle">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="my-3 border-none crypto-shadow timeline-end timeline-box">
+                <div className="px-4 py-3 w-[25rem] flex flex-row gap-x-3 items-center justify-center">
+                  <FontAwesomeIcon
+                    icon={faCircleCheck}
+                    style={{ color: "#099f36" }}
+                  />
+                  <p className="text-xl">Done</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* stats container */}
+      <div className="flex flex-col items-center justify-center my-28">
+        <div>
+          <p className="mb-16 text-4xl font-bold">Exira Ecosystem</p>
+        </div>
+        <div className="grid grid-cols-3 grid-rows-2 gap-x-24 gap-y-10">
+          <div className="flex flex-col items-center justify-center gap-y-0">
+            <p className="text-6xl font-bold">314,577</p>
+            <p className="text-xl">Active Shareholders</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-y-0">
+            <p className="text-6xl font-bold">4894</p>
+            <p className="text-xl">Properties</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-y-0">
+            <p className="text-6xl font-bold">$1,733,578</p>
+            <p className="text-xl">Avg. Daily Transfers</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-y-0">
+            <p className="text-6xl font-bold">$4,750,796</p>
+            <p className="text-xl">Dividends Paid-out</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-y-0">
+            <p className="text-6xl font-bold">32</p>
+            <p className="text-xl">Global Cities</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-y-0">
+            <p className="text-6xl font-bold">6,344,867</p>
+            <p className="text-xl">Active Shares</p>
+          </div>
+        </div>
+      </div>
+
+      {/* properties for everyone container */}
+      <div className="flex flex-col items-center justify-center my-28">
+        <div className="flex flex-col mb-4 gap-y-0">
+          <p className="text-4xl font-bold ">
+            Properties for Everyone's Budget
+          </p>
+          {/* sub heading container */}
+          <div className="flex flex-col items-center justify-center my-4">
+            <p className="text-md">Show prices in</p>
+            <div className="mt-2">
+              <PriceBar tabs={["USD", "EUR", "INR"]} />
+            </div>
+          </div>
+        </div>
+
+        {/* cards container */}
+        <div className="flex flex-row items-center gap-x-12">
+          {/* card 1 */}
+          <div className="flex flex-col p-6 px-10 gap-y-3 rounded-3xl bg-black/10">
+            <p className="text-2xl">From as low as,</p>
+            <div className="leading-none">
+              <p className="text-6xl font-bold">$30</p>
+              <p className="text-lg">per share</p>
+            </div>
+
+            <div className="flex flex-col mt-2 leadi gap-y-0">
+              <p className="text-3xl">4,566</p>
+              <p className="text-md">Shares Available</p>
+            </div>
+
+            <button className="p-2 px-16 py-3 mt-3 text-white bg-black border-2 rounded-full hover:bg-white hover:border-black hover:text-black ">
+              Invest Now
+            </button>
+          </div>
+
+          {/* card 2 */}
+          <div className="flex flex-col p-6 px-10 gap-y-3 rounded-3xl bg-black/10">
+            <p className="text-2xl">From as low as,</p>
+            <div className="leading-none">
+              <p className="text-6xl font-bold">$30</p>
+              <p className="text-lg">per share</p>
+            </div>
+
+            <div className="flex flex-col mt-2 leadi gap-y-0">
+              <p className="text-3xl">4,566</p>
+              <p className="text-md">Shares Available</p>
+            </div>
+
+            <button className="p-2 px-16 py-3 mt-3 text-white bg-black border-2 rounded-full hover:bg-white hover:border-black hover:text-black ">
+              Invest Now
+            </button>
+          </div>
+
+          {/* card 3 */}
+          <div className="flex flex-col p-6 px-10 gap-y-3 rounded-3xl bg-black/10">
+            <p className="text-2xl">From as low as,</p>
+            <div className="leading-none">
+              <p className="text-6xl font-bold">$30</p>
+              <p className="text-lg">per share</p>
+            </div>
+
+            <div className="flex flex-col mt-2 leadi gap-y-0">
+              <p className="text-3xl">4,566</p>
+              <p className="text-md">Shares Available</p>
+            </div>
+
+            <button className="p-2 px-16 py-3 mt-3 text-white bg-black border-2 rounded-full hover:bg-white hover:border-black hover:text-black ">
+              Invest Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* build wealth container */}
+      <div className="flex flex-col items-center justify-center w-full py-12 bg-black my-28 gap-y-3">
+        <div className="flex flex-col ">
+          <p className="text-4xl font-bold text-white">
+            Start building wealth form today
+          </p>
+          <p className="text-lg text-white">
+            Real estate shares are the key to building lasting wealth. Begin
+            your journey with us now.
+          </p>
+        </div>
+        <button className="p-2 px-16 py-3 mt-3 text-black bg-white border-2 rounded-full hover:bg-black hover:border-white hover:text-white ">
+          Get Started
+        </button>
+      </div>
+
+      {/* ask doubts container */}
+      <div className="flex flex-col items-center justify-center mb-44 my-28">
+        {/* header */}
+        <div className="flex flex-col gap-y-2">
+          <p className="text-4xl font-bold">Have doubts?</p>
+          <p className="text-lg w-[50rem] leading-tight">
+            Get all your doubts cleared and start investing from now. You can
+            find how the investment flow works and other legal documents in the
+            How it works? section.
+          </p>
+        </div>
+
+        {/* double cards */}
+        <div className="flex flex-row items-center justify-center my-4 mt-8 gap-x-8">
+          {/* card one */}
+          <div className="flex flex-col p-6 px-10 gap-y-3 justify-between rounded-3xl bg-black/10 w-[20rem] h-[18rem]">
+            <p className="text-5xl">AI</p>
+            <p className="text-md">
+              Chat with our AI-powered Chatbot to get answers to all your
+              questions instantly
+            </p>
+            <button className="w-full p-2 px-16 py-3 mt-3 text-white bg-black border-2 rounded-full hover:bg-white hover:border-black hover:text-black">
+              Chat Now
+            </button>
+          </div>
+
+          {/* card two */}
+          <div className="flex flex-col p-6 px-10 gap-y-3 rounded-3xl justify-between  bg-black/10 w-[20rem] h-[18rem]">
+            <p className="text-5xl">@</p>
+            <p className="text-md">
+              Drop us a mail and we’ll get back to your shortly
+            </p>
+            <button className="w-full p-2 px-16 py-3 mt-3 text-white bg-black border-2 rounded-full hover:bg-white hover:border-black hover:text-black">
+              Send Mail
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* footer */}
+      <Footer />
+    </div>
+  );
+}
+
+export default Home;

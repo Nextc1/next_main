@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
+  font-family: "Barlow", system-ui;
+  /* line-height: 1.5; */
+
+  /* color-scheme: light; */
+  /* color: rgba(255, 255, 255, 0.87); */
+  background-color: #f7feff;
+
+  /* font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.bow-100 {
+  font-family: "Barlow", system-ui;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.bow-200 {
+  font-family: "Barlow", system-ui;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.bow-300 {
+  font-family: "Barlow", system-ui;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.bow-400 {
+  font-family: "Barlow", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.bow-500 {
+  font-family: "Barlow", system-ui;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.bow-600 {
+  font-family: "Barlow", system-ui;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.bow-700 {
+  font-family: "Barlow", system-ui;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.bow-800 {
+  font-family: "Barlow", system-ui;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.bow-900 {
+  font-family: "Barlow", system-ui;
+  font-weight: 900;
+  font-style: normal;
+}

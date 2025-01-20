@@ -1,0 +1,97 @@
+#root {
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
+  text-align: center;
+  background-color: #f7feff;
+}
+
+.crypto-shadow {
+  box-shadow: 0px 4px 20.9px -3px rgba(0, 0, 0, 0.25) !important;
+}
+
+.invest-shadow {
+  box-shadow: 0px 4px 22.4px 7px rgba(0, 0, 0, 0.25);
+}
+
+.marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+  background-color: white;
+  border-radius: 0.5em;
+  box-shadow: 0px 4px 23.1px rgba(0, 0, 0, 0.25);
+  font-size: 1.5rem;
+  width: auto;
+  height: auto;
+}
+
+@media (max-width: 640px) {
+  .marker {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .marker {
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .marker {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .marker {
+    font-size: 1.8rem;
+  }
+}
+
+.marker svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+.custom-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #ff6347; /* Thumb color */
+  border: 2px solid #000; /* Thumb border */
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2); /* Thumb shadow */
+}
+
+.custom-range::-webkit-slider-runnable-track {
+  height: 8px;
+  background-color: #87ceeb; /* Track color */
+  border-radius: 4px;
+}
+
+/* For Firefox */
+.custom-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #ff6347; /* Thumb color */
+  border: 2px solid #000; /* Thumb border */
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2); /* Thumb shadow */
+}
+
+.custom-range::-moz-range-track {
+  height: 8px;
+  background-color: #87ceeb; /* Track color */
+  border-radius: 4px;
+}
+
+/* General styling for all browsers */
+.custom-range {
+  appearance: none;
+  width: 100%;
+}
