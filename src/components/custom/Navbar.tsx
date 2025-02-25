@@ -86,7 +86,7 @@ function Navbar() {
   return (
     <nav className="relative flex flex-wrap items-center justify-between w-full p-4 md:px-10 py-7">
       {/* Left container: Logo */}
-      <div className="text-3xl font-black md:text-5xl">Exira</div>
+      <div className="text-3xl font-black md:text-5xl">Next Carbon</div>
 
       {/* Mobile menu button */}
       {/* Mobile menu button */}
